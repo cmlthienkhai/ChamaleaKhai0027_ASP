@@ -1,0 +1,143 @@
+﻿/* Định dạng bảng giỏ hàng */
+.table-shopping-cart {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-family: Arial, sans-serif;
+    overflow-x: auto; /* Cho phép cuộn ngang nếu cần */
+    display: block; /* Đảm bảo bảng có thể cuộn ngang */
+    table-layout: fixed; /* Đặt layout cố định cho bảng */
+}
+
+    .table-shopping-cart th, .table-shopping-cart td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        overflow: hidden;
+    }
+
+    .table-shopping-cart th {
+        background-color: #f4f4f4;
+        font-weight: bold;
+    }
+
+    .table-shopping-cart img {
+        max-width: 120px; /* Đảm bảo hình ảnh không quá lớn */
+        height: auto;
+        border-radius: 5px;
+        object-fit: cover; /* Đảm bảo hình ảnh không bị biến dạng */
+    }
+
+.quantity-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quantity-button {
+    background-color: #b7d1ed; /* Màu xanh cho nút tăng/giảm */
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+    .quantity-button:hover {
+        background-color: #0056b3; /* Màu xanh đậm hơn khi hover */
+    }
+
+.quantity-input {
+    width: 40px;
+    text-align: center;
+    border: 1px solid #ddd;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+    margin: 0 5px;
+}
+
+.remove-button {
+    background-color: #dc3545; /* Màu đỏ cho nút xóa */
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+    .remove-button:hover {
+        background-color: #c82333; /* Màu đỏ đậm hơn khi hover */
+    }
+
+.price-wrap, .total-price-wrap {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.price, .total-price, .total-price-summary {
+    font-weight: bold;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+}
+
+.btn-light {
+    background-color: #f8f9fa;
+    border: none;
+    padding: 10px 20px;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .table-shopping-cart th, .table-shopping-cart td {
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    .quantity-container {
+        flex-direction: flex; /* Đặt các nút tăng/giảm theo chiều dọc trên màn hình nhỏ */
+    }
+
+    .quantity-button {
+        padding: 4px 6px;
+    }
+
+    .quantity-input {
+        width: 30px;
+    }
+
+    .table-shopping-cart img {
+        max-width: 80px;
+    }
+}
+/* Đảm bảo màu chữ cho các liên kết trong navbar */
+.navbar-nav .nav-link {
+    color: #333; /* Màu chữ mặc định */
+}
+
+    .navbar-nav .nav-link:hover {
+        color: #007bff; /* Màu chữ khi hover */
+    }
+
+/* Đảm bảo màu chữ cho các mục trong dropdown menu */
+.dropdown-menu .dropdown-item {
+    color: #333; /* Màu chữ mặc định */
+}
+
+    .dropdown-menu .dropdown-item:hover {
+        color: #007bff; /* Màu chữ khi hover */
+        background-color: #f8f9fa; /* Màu nền khi hover */
+    }
+
+/* Đảm bảo màu chữ cho mục hiện tại */
+.navbar-nav .nav-item.active .nav-link {
+    color: #007bff; /* Màu chữ cho mục hiện tại */
+}
