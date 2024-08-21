@@ -20,6 +20,6 @@ namespace ChamaleaKhai0027.Context
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string ImageUrl { get; set; }
-        public Nullable<int> IsAdmin { get; set; }
+        public bool IsAdmin { get; set; }
     }
 }

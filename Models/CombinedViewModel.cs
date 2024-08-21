@@ -6,5 +6,6 @@ namespace ChamaleaKhai0027.Context
     {
         public IEnumerable<Category> Categories { get; set; }
         public IEnumerable<Product> Products { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

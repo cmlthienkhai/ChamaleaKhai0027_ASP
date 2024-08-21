@@ -22,7 +22,7 @@
     }
 
     .table-shopping-cart img {
-        max-width: 120px; /* Đảm bảo hình ảnh không quá lớn */
+        max-width: 100px; /* Đảm bảo hình ảnh không quá lớn */
         height: auto;
         border-radius: 5px;
         object-fit: cover; /* Đảm bảo hình ảnh không bị biến dạng */
@@ -141,3 +141,4 @@
 .navbar-nav .nav-item.active .nav-link {
     color: #007bff; /* Màu chữ cho mục hiện tại */
 }
+

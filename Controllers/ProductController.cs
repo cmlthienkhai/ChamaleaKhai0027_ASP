@@ -10,9 +10,11 @@ public class ProductController : Controller
 
     public ActionResult Index()
     {
-        var listProduct = _context.Products.ToList();
-        return View(listProduct);
+        var products = _context.Products.ToList();
+        ViewBag.ItemCount = products.Count;
+        return View(products);
     }
+
 
 
     public ActionResult ProductDetail(int id)

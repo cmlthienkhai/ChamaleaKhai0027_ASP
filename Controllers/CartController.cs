@@ -142,109 +142,48 @@ namespace ChamaleaKhai0027.Controllers
             return Json(new { Message = "Sản phẩm không tồn tại trong giỏ hàng" });
         }
 
-        // Thay đổi thông tin này với thông tin của bạn
-        private const string VNPAY_URL = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        private const string VNPAY_TMN_CODE = "YOUR_TMN_CODE";
-        private const string VNPAY_SECRET_KEY = "YOUR_SECRET_KEY";
-        public ActionResult Pay()
+        private const string stripeSecretKey = "pk_test_4eC39HqLyjWDarjtT1zdp7dc"; // Thay thế bằng khóa bí mật thực tế của bạn
+
+        public ActionResult Payment()
         {
-            // Logic xử lý thanh toán với thẻ tín dụng
             return View();
         }
+
         [HttpPost]
-        public ActionResult PayWithVNPay()
+        public async Task<ActionResult> PayWithCreditCard(string stripeToken)
         {
-            // Tạo dữ liệu thanh toán
-            var paymentData = CreateVNPayData();
-            // Chuyển hướng đến VNPay để thanh toán
-            return Redirect(paymentData);
+            StripeConfiguration.ApiKey = stripeSecretKey;
 
-        }
-
-        private string CreateVNPayData()
-        {
-            var amount = GetCartTotal("VND"); // Tổng tiền từ giỏ hàng
-            var transactionId = Guid.NewGuid().ToString("N"); // Mã giao dịch duy nhất
-            var returnUrl = Url.Action("PaymentResult", "Cart", null, Request.Url.Scheme); // Sử dụng Request.Url.Scheme
-            var orderId = DateTime.Now.Ticks.ToString();
-
-            var data = new SortedDictionary<string, string>
+            var options = new ChargeCreateOptions
             {
-                { "vnp_Version", "2.1.0" },
-                { "vnp_TmnCode", VNPAY_TMN_CODE },
-                { "vnp_Amount", (amount * 100).ToString() }, // VNPay yêu cầu số tiền tính bằng đồng
-                { "vnp_Command", "pay" },
-                { "vnp_CreateDate", DateTime.Now.ToString("yyyyMMddHHmmss") },
-                { "vnp_Currency", "VND" },
-                { "vnp_IpAddr", Request.UserHostAddress },
-                { "vnp_Locale", "vn" },
-                { "vnp_OrderInfo", "Thanh toán đơn hàng #" + orderId },
-                { "vnp_ReturnUrl", returnUrl },
-                { "vnp_TxnRef", transactionId }
+                Amount = 5000, // Amount in cents
+                Currency = "usd",
+                Description = "Example charge",
+                Source = stripeToken,
             };
+            var service = new ChargeService();
+            Charge charge = await service.CreateAsync(options);
 
-            var hashData = string.Join("&", data.OrderBy(x => x.Key).Select(x => x.Key + "=" + x.Value));
-            var hmac = new HMACSHA512(Encoding.UTF8.GetBytes(VNPAY_SECRET_KEY));
-            var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(hashData));
-            var hashString = BitConverter.ToString(hash).Replace("-", "").ToLower();
-
-            var url = VNPAY_URL + "?" + hashData + "&vnp_SecureHash=" + hashString;
-            return url;
-        }
-
-        [HttpGet]
-        public ActionResult PaymentReturn()
-        {
-            var vnp_ResponseCode = Request.QueryString["vnp_ResponseCode"];
-            var vnp_TxnRef = Request.QueryString["vnp_TxnRef"];
-            var vnp_Amount = Request.QueryString["vnp_Amount"];
-
-            if (vnp_ResponseCode == "00")
+            if (charge.Status == "succeeded")
             {
-                ViewBag.Message = "Thanh toán thành công!";
-            }
-            else
-            {
-                ViewBag.Message = "Thanh toán thất bại!";
+                return RedirectToAction("PaymentReturn", new { message = "Payment succeeded!" });
             }
 
-            return View();
+            return RedirectToAction("PaymentReturn", new { message = "Payment failed!" });
         }
 
         [HttpPost]
-        public async Task<ActionResult> PayWithCreditCard(string token)
+        public ActionResult PayWithVNPay(string orderID)
         {
-            try
-            {
-                StripeConfiguration.ApiKey = STRIPE_SECRET_KEY; // Thay thế bằng khóa bí mật của bạn
+            // Your VNPay integration logic here
+            // Redirect to VNPay payment URL
+            return RedirectToAction("PaymentReturn", new { message = "Processing VNPay payment!" });
+        }
 
-                var options = new ChargeCreateOptions
-                {
-                    Amount = (long)(GetCartTotal("USD") * 100), // Stripe yêu cầu số tiền tính bằng xu
-                    Currency = "usd",
-                    Description = "Thanh toán đơn hàng",
-                    Source = token, // Token từ client-side
-                };
-
-                var service = new ChargeService();
-                Charge charge = await service.CreateAsync(options);
-
-                if (charge.Status == "succeeded")
-                {
-                    ViewBag.Message = "Thanh toán thành công!";
-                }
-                else
-                {
-                    ViewBag.Message = "Thanh toán thất bại!";
-                }
-            }
-            catch (Exception ex)
-            {
-                // Xử lý lỗi và ghi log nếu cần
-                ViewBag.Message = "Đã xảy ra lỗi khi thanh toán: " + ex.Message;
-            }
-
-            return View("PaymentReturn");
+        public ActionResult PaymentReturn(string message)
+        {
+            ViewBag.Message = message;
+            return View();
         }
 
 
@@ -264,7 +203,6 @@ namespace ChamaleaKhai0027.Controllers
             return 0;
         }
 
-        private const string STRIPE_SECRET_KEY = "sk_test_4eC39HqLyjWDarjtT1zdp7dc"; // Thay thế bằng khóa bí mật của bạn
 
     }
 

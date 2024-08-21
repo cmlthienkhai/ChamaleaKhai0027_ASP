@@ -8,12 +8,23 @@
 <div class="profile-container mb-5">
     <h3 class="text-center mt-1 mb-4">Account Information</h3>
 
+    <!-- Hiển thị ảnh người dùng -->
+    <div class="text-center mb-4">
+        @if (Model.ImageUrl != null)
+        {
+            <img src="@Url.Content("~/images/user/" + Model.ImageUrl)" alt="User Image" class="img-thumbnail" width="150" height="150" />
+        }
+        else
+        {
+            <img src="~/images/pro/default.png" alt="Default Image" class="img-thumbnail" width="150" height="150" />
+        }
+    </div>
+
     <p><strong>Full Name:</strong> @Model.FirstName @Model.LastName</p>
     <p><strong>Email:</strong> @Model.Email</p>
     <a href="@Url.Action("Logout", "User")" class="btn btn-danger">Logout</a>
     <!-- Add more information if needed -->
 </div>
-
 
 <!-- Thêm CSS nội tuyến hoặc nhúng -->
 <style>
@@ -37,5 +48,11 @@
         .profile-container strong {
             color: #333;
         }
+
+    .img-thumbnail {
+        border: 1px solid #ddd;
+        border-radius: .25rem;
+        padding: .25rem;
+        background-color: #fff;
+    }
 </style>
-    </html>

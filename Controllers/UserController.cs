@@ -21,6 +21,12 @@ namespace ChamaleaKhai0027.Controllers
         {
             return View();
         }
+        public ActionResult Index()
+        {
+            var user = _context.Users.FirstOrDefault(); // Hoặc cách lấy dữ liệu của bạn
+            ViewBag.ImageUrl = user?.ImageUrl; // Cấp giá trị cho ViewBag
+            return View();
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]

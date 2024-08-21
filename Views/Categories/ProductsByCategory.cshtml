@@ -64,7 +64,7 @@ $(document).ready(function () {
         url: '@Url.Action("Index", "Cart")',
         type: 'GET',
         success: function (response) {
-            if (response.Count > 0) {
+            if (response.Count > 0) {/
                 $('.notify-cart').text(response.Count).show();
             }
         },

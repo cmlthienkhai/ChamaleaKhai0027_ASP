@@ -1,39 +1,39 @@
-﻿@{
-    ViewBag.Title = "Payment";
-}
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Payment</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .StripeElement {
+            box-sizing: border-box;
+            height: 40px;
+            padding: 10px 12px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            background-color: white;
+        }
 
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://js.stripe.com/v3/"></script>
-<style>
-    .StripeElement {
-        box-sizing: border-box;
-        height: 40px;
-        padding: 10px 12px;
-        border: 1px solid transparent;
-        border-radius: 4px;
-        background-color: white;
-    }
+        .StripeElement--focus {
+            border: 1px solid #007bff;
+        }
 
-    .StripeElement--focus {
-        border: 1px solid #007bff;
-    }
+        .StripeElement--invalid {
+            border: 1px solid #fa755a;
+        }
 
-    .StripeElement--invalid {
-        border: 1px solid #fa755a;
-    }
+        .StripeElement--webkit-autofill {
+            background-color: #fefde5 !important;
+        }
 
-    .StripeElement--webkit-autofill {
-        background-color: #fefde5 !important;
-    }
-
-    .vnpay-btn {
-        background-color: #007bff;
-        color: #fff;
-    }
-</style>
+        .vnpay-btn {
+            background-color: #007bff;
+            color: #fff;
+        }
+    </style>
+</head>
 <body>
     <div class="container mt-5">
-        <h2>Choose Payment</h2>
+        <h2>Payment</h2>
         <div class="row">
             <div class="col-md-12 mb-4">
                 <h4>Pay with Credit Card</h4>
@@ -47,15 +47,23 @@
             <div class="col-md-12">
                 <h4>Pay with VNPay</h4>
                 <form id="vnpay-form" method="post" action="@Url.Action("PayWithVNPay", "Cart")">
-                    <!-- Optional: Add hidden inputs here if needed -->
+                    <!-- Additional hidden inputs for VNPay -->
+                    <input type="hidden" name="vnp_TxnRef" value="123456789"> <!-- Order ID -->
+                    <input type="hidden" name="vnp_Amount" value="1000000000"> <!-- Amount in VND -->
+                    <input type="hidden" name="vnp_CurrCode" value="VND"> <!-- Currency Code -->
+                    <input type="hidden" name="vnp_TxnDate" value="@DateTime.Now.ToString("yyyyMMddHHmmss")"> <!-- Transaction Date -->
+                    <input type="hidden" name="vnp_ReturnUrl" value="http://yourdomain.com/return-url"> <!-- Return URL -->
+                    <input type="hidden" name="vnp_OrderInfo" value="Order Info Description"> <!-- Order Info Description -->
+                    <input type="hidden" name="vnp_TransactionNo" value="123456789"> <!-- Transaction No -->
                     <button type="submit" class="btn vnpay-btn mt-3">Pay with VNPay</button>
                 </form>
             </div>
         </div>
     </div>
+    <script src="https://js.stripe.com/v3/"></script>
     <script>
         // Stripe integration
-        var stripe = Stripe('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
+        var stripe = Stripe('pk_test_4eC39HqLyjWDarjtT1zdp7dc');
         var elements = stripe.elements();
 
         var card = elements.create('card');
@@ -85,12 +93,11 @@
         // VNPay integration
         var vnpayForm = document.getElementById('vnpay-form');
         vnpayForm.addEventListener('submit', function (event) {
-            //Optional: Add any additional parameters for VNPay here if needed
-            // Example: You might set a hidden input with transaction amount or order ID
+            // Optional: Add any additional parameters for VNPay here if needed
             var hiddenInput = document.createElement('input');
             hiddenInput.setAttribute('type', 'hidden');
             hiddenInput.setAttribute('name', 'orderID');
-            hiddenInput.setAttribute('value', '12345');
+            hiddenInput.setAttribute('value', '12345'); // Example order ID
             vnpayForm.appendChild(hiddenInput);
 
             // Optionally prevent the default form submission if needed
